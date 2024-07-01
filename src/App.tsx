@@ -6,7 +6,7 @@ import routerBindings, {
     UnsavedChangesNotifier,
     DocumentTitleHandler,
 } from '@refinedev/react-router-v6';
-import { DashboardOutlined } from '@ant-design/icons';
+import { DashboardOutlined, ShopOutlined } from '@ant-design/icons';
 import { ColorModeContextProvider } from './contexts/color-mode';
 import { Dashboard } from "./pages/dashboard";
 import '@refinedev/antd/dist/reset.css';
@@ -14,6 +14,8 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 import { supabaseClient } from './utility/supabaseClient';
 import { dataProvider } from '@refinedev/supabase';
+
+import { CompanyList, CompanyCreate, CompanyEdit, CompanyShow } from "./pages/companies";
 
 const queryClient = new QueryClient();
 
@@ -31,15 +33,22 @@ function App() {
                             routerProvider={routerBindings}
                             resources={[
                                 {
-                                    name: 'contacts',
+                                    name: 'dashboard',
                                     list: '/',
                                     meta: {
                                         icon: <DashboardOutlined />,
                                     },
                                 },
                                 {
-                                    name: 'dealStages', // Certifique-se de adicionar este recurso
-                                    list: '/',
+                                    name: "companies",
+                                    list: "/companies",
+                                    create: "/companies/create",
+                                    edit: "/companies/edit/:id",
+                                    show: "/companies/show/:id",
+                                    meta: {
+                                        canDelete: true,
+                                        icon: <ShopOutlined />,
+                                    },
                                 },
                             ]}
                             options={{
@@ -59,6 +68,12 @@ function App() {
                                     <Route path="/">
                                         <Route index element={<Dashboard />} />
                                     </Route>
+                                    <Route path="companies">
+                                        <Route index element={<CompanyList />} />
+                                        <Route path="create" element={<CompanyCreate />} />
+                                        <Route path="edit/:id" element={<CompanyEdit />} />
+                                        <Route path="show/:id" element={<CompanyShow />} />
+                                    </Route>
                                 </Route>
                             </Routes>
                             <RefineKbar />
@@ -69,35 +84,6 @@ function App() {
                 </ColorModeContextProvider>
             </RefineKbarProvider>
         </BrowserRouter>
-    );
-}
-
-function AppRoutes() {
-    const { queryClient } = useRefineContext();
-
-    if (!queryClient) {
-        return null; // or some loading indicator
-    }
-
-    return (
-        <>
-            <Routes>
-                <Route
-                    element={
-                        <ThemedLayoutV2>
-                            <Outlet />
-                        </ThemedLayoutV2>
-                    }
-                >
-                    <Route path="/">
-                        <Route index element={<Dashboard />} />
-                    </Route>
-                </Route>
-            </Routes>
-            <RefineKbar />
-            <UnsavedChangesNotifier />
-            <DocumentTitleHandler />
-        </>
     );
 }
 
