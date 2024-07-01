@@ -6,7 +6,7 @@ import routerBindings, {
     UnsavedChangesNotifier,
     DocumentTitleHandler,
 } from '@refinedev/react-router-v6';
-import { DashboardOutlined, ShopOutlined } from '@ant-design/icons';
+import { DashboardOutlined, ShopOutlined, ContactsOutlined } from '@ant-design/icons';
 import { ColorModeContextProvider } from './contexts/color-mode';
 import { Dashboard } from "./pages/dashboard";
 import '@refinedev/antd/dist/reset.css';
@@ -16,6 +16,7 @@ import { supabaseClient } from './utility/supabaseClient';
 import { dataProvider } from '@refinedev/supabase';
 
 import { CompanyList, CompanyCreate, CompanyEdit, CompanyShow } from "./pages/companies";
+import { ContactList, ContactCreate, ContactEdit, ContactShow } from "./pages/contacts";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,17 @@ function App() {
                                         icon: <ShopOutlined />,
                                     },
                                 },
+                                {
+                                    name: "contacts",
+                                    list: "/contacts",
+                                    create: "/contacts/create",
+                                    edit: "/contacts/edit/:id",
+                                    show: "/contacts/show/:id",
+                                    meta: {
+                                        canDelete: true,
+                                        icon: <ContactsOutlined />,
+                                    },
+                                },
                             ]}
                             options={{
                                 syncWithLocation: true,
@@ -73,6 +85,12 @@ function App() {
                                         <Route path="create" element={<CompanyCreate />} />
                                         <Route path="edit/:id" element={<CompanyEdit />} />
                                         <Route path="show/:id" element={<CompanyShow />} />
+                                    </Route>
+                                    <Route path="contacts">
+                                        <Route index element={<ContactList />} />
+                                        <Route path="create" element={<ContactCreate />} />
+                                        <Route path="edit/:id" element={<ContactEdit />} />
+                                        <Route path="show/:id" element={<ContactShow />} />
                                     </Route>
                                 </Route>
                             </Routes>
