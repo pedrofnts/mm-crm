@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 
 export const DealChart: React.FC = () => {
     const { data, isLoading, isError } = useList({
-        resource: "dealstages",
+        resource: "deal_stages",
         filters: [
             {
                 field: "title",
@@ -18,9 +18,9 @@ export const DealChart: React.FC = () => {
         metaData: {
             select: `
                 *,
-                dealsaggregate (
-                    closedatemonth,
-                    closedateyear,
+                deals_aggregate (
+                    close_date_month,
+                    close_date_year,
                     value
                 )
             `
@@ -32,9 +32,9 @@ export const DealChart: React.FC = () => {
         
         const won = stages
             .find((node) => node.title === "WON")
-            ?.dealsaggregate?.map((item) => {
-                const { closedatemonth, closedateyear } = item;
-                const date = dayjs(`${closedateyear}-${closedatemonth}-01`);
+            ?.deals_aggregate?.map((item) => {
+                const { close_date_month, close_date_year } = item;
+                const date = dayjs(`${close_date_year}-${close_date_month}-01`);
                 return {
                     timeUnix: date.unix(),
                     timeText: date.format("MMM YYYY"),
@@ -45,9 +45,9 @@ export const DealChart: React.FC = () => {
 
         const lost = stages
             .find((node) => node.title === "LOST")
-            ?.dealsaggregate?.map((item) => {
-                const { closedatemonth, closedateyear } = item;
-                const date = dayjs(`${closedateyear}-${closedatemonth}-01`);
+            ?.deals_aggregate?.map((item) => {
+                const { close_date_month, close_date_year } = item;
+                const date = dayjs(`${close_date_year}-${close_date_month}-01`);
                 return {
                     timeUnix: date.unix(),
                     timeText: date.format("MMM YYYY"),
